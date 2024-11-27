@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #currentPrice {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Chat</h1>
+    <div id="currentPrice">Current Price: $0</div> <!-- Виведення поточної ціни -->
+    <div id="messages"></div>
+    <input id="messageInput" type="text" placeholder="Type a message" />
+    <button id="sendButton">Send</button>
+
+    <script>
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsImV4cCI6MTczMjU1MDEzM30.WOBHhbl6FMp0YtYjoPr56_KNKtg0QQGBPfx2uKslUQg"; // Заміни на свій токен
+        const auctionId = 9;
+        const ws = new WebSocket(`ws://localhost:8000/ws?token=${token}&id=${auctionId}`);
+
+        const messagesDiv = document.getElementById("messages");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+        const currentPriceDiv = document.getElementById("currentPrice");
+
+        // Встановлення з'єднання
+        ws.onopen = () => {
+            console.log("Connected to WebSocket");
+        };
+
+        // Обробка отриманих повідомлень
+        ws.onmessage = (event) => {
+            // Очікуємо, що сервер буде надсилати лише нову поточну ціну
+            const newPrice = event.data; 
+            currentPriceDiv.textContent = `Current Price: $${newPrice}`;
+        };
+
+        // Обробка помилки
+        ws.onerror = (event) => {
+            console.error("WebSocket error:", event);
+        };
+
+        // Закриття з'єднання
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        // Відправка повідомлень
+        sendButton.addEventListener("click", () => {
+            const message = messageInput.value;
+            if (message) {
+                ws.send(message); // Відправляємо повідомлення на сервер
+                messageInput.value = ""; // Очистити поле вводу
+            }
+        });
+
+        // Відправка повідомлення натисканням Enter
+        messageInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
