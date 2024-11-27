@@ -6,3 +6,4 @@ sqlalchemy
 pydantic
 python-jose
 pyjwt
+pydantic[email]
