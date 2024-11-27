@@ -8,3 +8,4 @@ python-jose
 pyjwt
 pydantic[email]
 bcrypt
+python-multipart
