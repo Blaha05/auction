@@ -35,8 +35,8 @@
 
     <script>
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsImV4cCI6MTczMjU1MDEzM30.WOBHhbl6FMp0YtYjoPr56_KNKtg0QQGBPfx2uKslUQg"; // Заміни на свій токен
-        const auctionId = 9;
-        const ws = new WebSocket(`ws://localhost:8000/ws?token=${token}&id=${auctionId}`);
+        const auctionId = 9 
+        const ws = new WebSocket(`wss://auction-c25d.onrender.com/ws?token=${token}&id=${auctionId}`);
 
         const messagesDiv = document.getElementById("messages");
         const messageInput = document.getElementById("messageInput");
